@@ -6,7 +6,7 @@ import { UseAuth } from "../../context/auth";
 import { NavLink } from "react-router-dom";
 
 const Login = () => {
-  const [email, SetEmail] = useState("");s
+  const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
   const [auth, setAuth] = UseAuth();
