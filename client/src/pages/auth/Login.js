@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { UseAuth } from "../../context/auth";
 import { NavLink } from "react-router-dom";
 
@@ -10,12 +10,12 @@ const Login = () => {
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
   const [auth, setAuth] = UseAuth();
-  const location = useLocation();
+  const Host = "http://localhost:8000"
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/v1/auth/login", {
+      const res = await axios.post(`${Host}/api/v1/auth/login`, {
         email,
         password,
       });
@@ -27,7 +27,6 @@ const Login = () => {
           token: res.data.token,
         });
         localStorage.setItem("auth", JSON.stringify(res.data));
-        navigate(location.state || "/");
       } else {
         toast.error(res.data.message);
       }
@@ -41,14 +40,7 @@ const Login = () => {
       <div className="login ms-auto mt-3">
         <h1>
           <NavLink className="navbar-brand text-primary" to="/">
-            <img
-              src="/image/tl.png"
-              alt="Logo"
-              width={50}
-              height={35}
-              className="d-inline-block align-text-top ms-auto "
-            />
-            MegaMart
+            Device Manager
           </NavLink>
         </h1>
         <form
@@ -68,7 +60,6 @@ const Login = () => {
               onChange={(e) => SetEmail(e.target.value)}
               className="form-control form-control-sm"
               id="exampleInputEmail1"
-              aria-describedby="emailHelp"
             />
           </div>
           <div className="mb-3">
@@ -84,57 +75,21 @@ const Login = () => {
             />
           </div>
           <p className="statement">
-            By continuing, you agree to MegaMart's Conditions of Use and Privacy
+            By continuing, you agree to Device Manager's Conditions of Use and Privacy
             Notice.
           </p>
           <div className="d-grid gap-2 col-6 mx-auto">
-            <button type="submit" className="btn btn-sm btn-warning">
+            <button type="submit" className="btn btn-sm btn-primary">
               Continue
             </button>
-          </div>
-          <div className="accordion accordion-flush" id="accordionFlushExample">
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed text-primary"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseOne"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseOne"
-                >
-                  Need Help?
-                </button>
-              </h2>
-              <div
-                id="flush-collapseOne"
-                className="accordion-collapse collapse m-2 p-2"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  <NavLink
-                    className="link-offset-2 link-dark link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                    to="/forgot-password"
-                  >
-                    Forget Passwod ➡️
-                  </NavLink>
-                  <hr/>
-                  <NavLink
-                    className="link-offset-2 link-dark link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                  >
-                   Other issues with Sign-In
-                  </NavLink>
-                </div>
-              </div>
-            </div>
           </div>
         </form>
         <div className="mb-5">
           <hr />
-          <p className="text-center">New to MegaMart?</p>
-          <button type="button" className="btn btn-sm btn-warning ">
-            <Link className="btn btn-sm" to="/register">
-              Create your MegaMart Account
+          <p className="text-center">New to Device Manager?</p>
+          <button type="button" className="btn btn-sm btn-primary ">
+            <Link className="btn btn-sm btn-primary" to="/register">
+              Create your Device Manager Account
             </Link>
           </button>
         </div>
