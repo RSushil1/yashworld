@@ -26,7 +26,7 @@ const AdminDevices = () => {
   const [editUsername, setEditUsername] = useState("");
   const [editStatus, setEditStatus] = useState("");
   const [devicesList, setDevicesList] = useState([])
-  const Host = "http://localhost:8000";
+  const Host = "https://yashworld.vercel.app";
 
   // get all devices
   const getAllUsers = async () => {

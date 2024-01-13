@@ -10,7 +10,7 @@ const Login = () => {
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
   const [auth, setAuth] = UseAuth();
-  const Host = "http://localhost:8000"
+  const Host = "https://yashworld.vercel.app"
 
   const handleSubmit = async (e) => {
     e.preventDefault();

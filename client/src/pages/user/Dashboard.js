@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [auth, setAuth] = UseAuth();
   const [devicesList, setDevicesList] = useState([])
   const navigate = useNavigate("");
-  const Host = "http://localhost:8000"
+  const Host = "https://yashworld.vercel.app"
 
   //get all devices
   const getAllDevices = async () => {

@@ -10,7 +10,7 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate()
-    const Host = "http://localhost:8000"
+    const Host = "https://yashworld.vercel.app"
 
     // form function
     const handleSubmit = async (e) => {

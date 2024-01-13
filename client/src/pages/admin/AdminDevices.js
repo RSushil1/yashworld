@@ -17,7 +17,7 @@ const AdminDevices = () => {
     const [status1, setStatus1] = useState("");
     const [edit, setEdit] = useState(false)
     const navigate = useNavigate("");
-    const Host = "http://localhost:8000"
+    const Host = "https://yashworld.vercel.app"
 
 
     //get all devices

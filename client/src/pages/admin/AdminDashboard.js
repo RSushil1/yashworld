@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState();
   const navigate = useNavigate("");
   const [devicesList, setDevicesList] = useState([])
-  const Host = "http://localhost:8000"
+  const Host = "https://yashworld.vercel.app"
 
    // get all devices
    const getAllUsers = async () => {
