@@ -5,48 +5,49 @@ import JWT from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone, address, answer } = req.body;
-    //validations
-    if (!name) {
-      return res.send({ error: "Name is Required" });
+    const { name, email, password, phone, devices, username, status } = req.body;
+
+    // Validations
+    if (!name || !email || !password || !phone || !devices || !username || !status) {
+      return res.status(400).send({ error: "All fields are required" });
     }
-    if (!email) {
-      return res.send({ message: "Email is Required" });
-    }
-    if (!password) {
-      return res.send({ message: "Password is Required" });
-    }
-    if (!address) {
-      return res.send({ message: "Address is Required" });
-    }
-    //check user
-    const exisitingUser = await userModel.findOne({ email });
-    //exisiting user
-    if (exisitingUser) {
-      return res.status(200).send({
+
+    // Check if the user already exists
+    const existingUser = await userModel.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).send({
         success: false,
-        message: "Already Register please login",
+        message: "User already registered",
       });
     }
-    //register user
+
+    // Hash the password
     const hashedPassword = await hashPassword(password);
-    //save
-    const user = await new userModel({
+
+    // Create a new user
+    const newUser = new userModel({
       name,
       email,
-      address,
+      phone,
+      devices,
+      username,
       password: hashedPassword,
-    }).save();
+      status,
+    });
+
+    // Save the user to the database
+    await newUser.save();
 
     res.status(201).send({
       success: true,
-      message: "User Register Successfully",
-      user,
+      message: "User registered successfully",
+      user: newUser,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Error in Registeration",
+      message: "Error in registration",
       error,
     });
   }
@@ -109,3 +110,72 @@ export const loginController = async (req, res) => {
     });
   }
 };
+
+//get all devices
+export const getUserController = async (req, res) => {
+  try {
+    const users = await userModel
+      .find({})
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      countTotal: users.length,
+      message: "All users ",
+      users,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Erorr in getting users",
+      error: error.message,
+    });
+  }
+};
+
+//delete controller
+export const deleteUserController = async (req, res) => {
+  try {
+    await userModel.findByIdAndDelete(req.params.uid);
+    res.status(200).send({
+      success: true,
+      message: "device Deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error while deleting device",
+      error,
+    });
+  }
+};
+
+//upate User
+export const updateUserController = async (req, res) => {
+  try {
+    const { name, email, phone, devices, username, status } = req.body;
+    // Validations
+    if (!name || !email || !phone || !devices || !username || !status) {
+      return res.status(400).send({ error: "All fields are required" });
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      req.params.uid,
+      {name, email, phone, devices, username, status }, 
+      { new: true }
+    );
+    await updatedUser.save();
+    res.status(201).send({
+      success: true,
+      message: "user Updated Successfully",
+      updatedUser,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in Updte user",
+    });
+  }
+};
+
+

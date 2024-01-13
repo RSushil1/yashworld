@@ -12,13 +12,27 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    devices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "devices", // Assuming the model for devices is named "Device"
+      },
+    ],
+    username: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
     },
-    address: {
-      type: {},
-      required: true,
+    status: {
+      type: String,
+      default: "Active",
     },
     role: {
       type: Number,
@@ -29,3 +43,4 @@ const userSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("users", userSchema);
+

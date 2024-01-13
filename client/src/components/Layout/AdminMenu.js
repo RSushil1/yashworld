@@ -6,31 +6,26 @@ const AdminMenu = () => {
     <>
       <div className="text-centre">
         <div className="list-group border border-info">
-        <NavLink className="btn btn-info" to="/dashboard/admin">Admin Menu ➡️</NavLink>
+        <NavLink className="btn btn-info">Admin Menu ➡️</NavLink>
           <NavLink
-            to="/dashboard/admin/create-category"
+            to="/dashboard/admin"
             className="list-group-item list-group-item-action"
             aria-current="true"
           >
-            Create Category
+           Dashboard
           </NavLink>
-          <NavLink to="/dashboard/admin/create-products" className="list-group-item list-group-item-action">
-            Create Products
-          </NavLink>
-          <NavLink
-            to="/dashboard/admin/products"
-            className="list-group-item list-group-item-action"
-          >
-            Products
+          <NavLink to="/dashboard/admin/devices" className="list-group-item list-group-item-action">
+            Divices
           </NavLink>
           <NavLink
-            to="/dashboard/admin/orders"
+            to="/dashboard/admin/users"
             className="list-group-item list-group-item-action"
           >
-            Orders
+            Users
           </NavLink>
         </div>
       </div>
+      
     </>
   );
 };

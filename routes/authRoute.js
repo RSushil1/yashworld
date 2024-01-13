@@ -2,6 +2,9 @@ import express from "express";
 import {
   registerController,
   loginController,
+  getUserController,
+  deleteUserController,
+  updateUserController
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 
@@ -14,6 +17,20 @@ router.post("/register", registerController);
 
 //LOGIN || POST
 router.post("/login", loginController);
+
+//get users
+router.get("/get-users", getUserController);
+
+//delete device
+router.delete("/delete-user/:uid", deleteUserController);
+
+//update user
+router.put(
+  "/update-user/:uid",
+  requireSignIn,
+  isAdmin,
+  updateUserController
+);
 
 //protected User route auth
 router.get("/user-auth", requireSignIn, (req, res) => {
