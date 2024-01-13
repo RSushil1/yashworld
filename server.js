@@ -24,7 +24,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/device", deviceRoutes);
 
 //PORT
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 //run listen
 app.listen(PORT, () => {
