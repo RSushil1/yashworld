@@ -7,11 +7,12 @@ import Spinner from "../Spinner";
 const PrivateRoute = () => {
   const [ok, setOk] = useState(false);
   const [auth] = UseAuth();
+  const Host = "https://yashworld.vercel.app"
 
   useEffect(() => {
     const authCheck = async () => {
       try {
-        const res = await axios.get("/api/v1/auth/user-auth", {
+        const res = await axios.get(`${Host}/api/v1/auth/user-auth`, {
           headers: {
             Authorization: auth?.token,
           },

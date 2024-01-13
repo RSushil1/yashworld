@@ -7,7 +7,7 @@ import Spinner from "../Spinner";
 const AdminRoute = () => {
   const [ok, setOk] = useState(false);
   const [auth] = UseAuth();
-  const Host = "http://localhost:8000"
+  const Host = "https://yashworld.vercel.app"
 
   useEffect(() => {
     const authCheck = async () => {
