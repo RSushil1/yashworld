@@ -1,10 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UseAuth } from "../../context/auth";
 import "../style.css"
 import AdminMenu from "../../components/Layout/AdminMenu";
+import { toast } from "react-toastify";
+import {useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AdminDashboard = () => {
-  const [auth] = UseAuth();
+  const [auth, setAuth] = UseAuth();
+  const [users, setUsers] = useState();
+  const navigate = useNavigate("");
+  const [devicesList, setDevicesList] = useState([])
+  const Host = "http://localhost:8000"
+
+   // get all devices
+   const getAllUsers = async () => {
+    try {
+      const { data } = await axios.get(`${Host}/api/v1/auth/get-users`);
+      if (data?.success) {
+        setUsers(data?.users);
+      }
+    } catch (error) {
+      toast.error("Something went wrong in getting catgeory");
+    }
+  };
+
+   //get all devices
+   const getAllDevices = async () => {
+    try {
+      const { data } = await axios.get(`${Host}/api/v1/device/get-devices`);
+      if (data?.success) {
+        setDevicesList(data?.devices);
+      }
+    } catch (error) {
+      toast.error("Something went wrong in getting catgeory");
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+    getAllDevices();
+  }, []);
+
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout Successfully");
+    navigate("/");
+  };
+
+  const renderUserDevices = (userDevices) => {
+    const userDeviceNames = devicesList
+      .filter((device) => userDevices.includes(device._id))
+      .map((device) => device.name);
+
+    return userDeviceNames.join(', ');
+  };
 
   return (
    <div>
@@ -17,12 +72,6 @@ const AdminDashboard = () => {
       </a>
       <i className="bi bi-list toggle-sidebar-btn" />
     </div>{/* End Logo */}
-    <div className="search-bar">
-      <form className="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-        <button type="submit" title="Search"><i className="bi bi-search" /></button>
-      </form>
-    </div>{/* End Search Bar */}
     <nav className="header-nav ms-auto">
       <ul className="d-flex align-items-center">
         <li className="nav-item d-block d-lg-none">
@@ -54,10 +103,10 @@ const AdminDashboard = () => {
               <hr className="dropdown-divider" />
             </li>
             <li>
-              <a className="dropdown-item d-flex align-items-center" href="#">
+              <button className="dropdown-item d-flex align-items-center" onClick={handleLogout}>
                 <i className="bi bi-box-arrow-right" />
                 <span>Sign Out</span>
-              </a>
+              </button>
             </li>
           </ul>
         </li>
@@ -93,53 +142,27 @@ const AdminDashboard = () => {
                   </ul>
                 </div>
                 <div className="card-body">
-                  <h5 className="card-title">Recent Sales <span>| Today</span></h5>
+                  <h5 className="card-title">Recent Users</h5>
                   <table className="table table-borderless datatable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Devices</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row"><a href="#">#2457</a></th>
-                        <td>Brandon Jacob</td>
-                        <td><a href="#" className="text-primary">At praesentium minu</a></td>
-                        <td>$64</td>
-                        <td><span className="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2147</a></th>
-                        <td>Bridie Kessler</td>
-                        <td><a href="#" className="text-primary">Blanditiis dolor omnis similique</a></td>
-                        <td>$47</td>
-                        <td><span className="badge bg-warning">Pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2049</a></th>
-                        <td>Ashleigh Langosh</td>
-                        <td><a href="#" className="text-primary">At recusandae consectetur</a></td>
-                        <td>$147</td>
-                        <td><span className="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Angus Grady</td>
-                        <td><a href="#" className="text-primar">Ut voluptatem id earum et</a></td>
-                        <td>$67</td>
-                        <td><span className="badge bg-danger">Rejected</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Raheem Lehner</td>
-                        <td><a href="#" className="text-primary">Sunt similique distinctio</a></td>
-                        <td>$165</td>
-                        <td><span className="badge bg-success">Approved</span></td>
-                      </tr>
+                    {users?.map((user, index) => (
+                          <tr key={user._id}>
+                            <th scope="row">{index + 1}</th>
+                            <td>{user.name}</td>
+                            <td>{renderUserDevices(user.devices)}</td>
+                            <td> <span className={user.status === "Active" ? "badge bg-success" : "badge bg-danger"}>
+                              {user.status}
+                            </span></td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

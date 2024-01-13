@@ -8,7 +8,7 @@ export const registerController = async (req, res) => {
     const { name, email, password, phone, devices, username, status } = req.body;
 
     // Validations
-    if (!name || !email || !password || !phone || !devices || !username || !status) {
+    if (!name || !email || !password || !phone || !username) {
       return res.status(400).send({ error: "All fields are required" });
     }
 
@@ -86,6 +86,12 @@ export const loginController = async (req, res) => {
         message: "Invalid Password",
       });
     }
+    if (user.status === "Deactive") {
+      return res.status(200).send({
+        success: false,
+        message: "Your Account id Deactive, contact to Admin",
+      });
+    }
     //token
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "3d",
@@ -95,9 +101,11 @@ export const loginController = async (req, res) => {
       message: "login successfully",
       user: {
         _id: user._id,
+        username: user.username,
         name: user.name,
         email: user.email,
-        address: user.address,
+        status: user.status,
+        devices: user.devices,
         role: user.role,
       },
       token,
@@ -111,7 +119,7 @@ export const loginController = async (req, res) => {
   }
 };
 
-//get all devices
+//get all users
 export const getUserController = async (req, res) => {
   try {
     const users = await userModel
@@ -173,7 +181,7 @@ export const updateUserController = async (req, res) => {
     res.status(500).send({
       success: false,
       error,
-      message: "Error in Updte user",
+      message: "Error in Update user",
     });
   }
 };

@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const AdminDevices = () => {
-    const [auth] = UseAuth();
+    const [auth, setAuth] = UseAuth();
     const [devices, setDevices] = useState();
     const [name, setName] = useState("");
     const [type, setType] = useState("");
@@ -16,7 +16,9 @@ const AdminDevices = () => {
     const [type1, setType1] = useState("");
     const [status1, setStatus1] = useState("");
     const [edit, setEdit] = useState(false)
+    const navigate = useNavigate("");
     const Host = "http://localhost:8000"
+
 
     //get all devices
     const getAllDevices = async () => {
@@ -93,6 +95,17 @@ const AdminDevices = () => {
         }
     };
 
+    const handleLogout = () => {
+        setAuth({
+            ...auth,
+            user: null,
+            token: "",
+        });
+        localStorage.removeItem("auth");
+        toast.success("Logout Successfully");
+        navigate("/");
+    };
+
     return (
         <div>
             {/* ======= Header ======= */}
@@ -104,12 +117,6 @@ const AdminDevices = () => {
                     </a>
                     <i className="bi bi-list toggle-sidebar-btn" />
                 </div>{/* End Logo */}
-                <div className="search-bar">
-                    <form className="search-form d-flex align-items-center" method="POST" action="#">
-                        <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-                        <button type="submit" title="Search"><i className="bi bi-search" /></button>
-                    </form>
-                </div>{/* End Search Bar */}
                 <nav className="header-nav ms-auto">
                     <ul className="d-flex align-items-center">
                         <li className="nav-item d-block d-lg-none">
@@ -141,10 +148,10 @@ const AdminDevices = () => {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a className="dropdown-item d-flex align-items-center" href="#">
+                                    <button className="dropdown-item d-flex align-items-center" onClick={handleLogout}>
                                         <i className="bi bi-box-arrow-right" />
                                         <span>Sign Out</span>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </li>

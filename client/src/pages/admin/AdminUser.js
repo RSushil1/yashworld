@@ -4,9 +4,10 @@ import "../style.css";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminDevices = () => {
-  const [auth] = UseAuth();
+  const [auth, setAuth] = UseAuth();
   const [users, setUsers] = useState();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ const AdminDevices = () => {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const [edit, setEdit] = useState(false);
+  const navigate = useNavigate("");
 
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -70,7 +72,7 @@ const AdminDevices = () => {
       }
     });
   };
-// edit modal
+  // edit modal
   const handleEditDeviceCheckboxChange = (deviceId, e) => {
     const isChecked = e.target.checked;
 
@@ -173,7 +175,7 @@ const AdminDevices = () => {
 
   const autofill = (id) => {
     const userToEdit = users?.find((user) => user._id === id);
-  
+
     if (userToEdit) {
       // Set the edit states with the user data
       setEditName(userToEdit.name || "");
@@ -184,8 +186,17 @@ const AdminDevices = () => {
       setEditStatus(userToEdit.status || "");
     }
   };
-  
 
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout Successfully");
+    navigate("/");
+  };
 
   return (
 
@@ -199,12 +210,6 @@ const AdminDevices = () => {
           </a>
           <i className="bi bi-list toggle-sidebar-btn" />
         </div>{/* End Logo */}
-        <div className="search-bar">
-          <form className="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-            <button type="submit" title="Search"><i className="bi bi-search" /></button>
-          </form>
-        </div>{/* End Search Bar */}
         <nav className="header-nav ms-auto">
           <ul className="d-flex align-items-center">
             <li className="nav-item d-block d-lg-none">
@@ -236,10 +241,10 @@ const AdminDevices = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" href="#">
+                  <button className="dropdown-item d-flex align-items-center" onClick={handleLogout}>
                     <i className="bi bi-box-arrow-right" />
                     <span>Sign Out</span>
-                  </a>
+                  </button>
                 </li>
               </ul>
             </li>
@@ -461,7 +466,7 @@ const AdminDevices = () => {
                                 className="btn btn-primary btn-sm ms-1"
                                 data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop"
-                                onClick={()=> autofill(user._id)}
+                                onClick={() => autofill(user._id)}
                               >
                                 Edit
                               </button>
@@ -491,101 +496,101 @@ const AdminDevices = () => {
                                     <div className="modal-body">
                                       <form onSubmit={(e) => handleEdit(user._id, e)} className="row g-3">
 
-                                      <div className="col-12">
-                                  <label htmlFor="inputName" className="form-label">
-                                    Name
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    id="inputName"
-                                    placeholder="Write a name"
-                                    value={editName}
-                                    onChange={(e) => setEditName(e.target.value)}
-                                  />
-                                </div>
-                                <div className="col-12">
-                                  <label htmlFor="inputEmail" className="form-label">
-                                    Email
-                                  </label>
-                                  <input
-                                    type="email"
-                                    className="form-control"
-                                    id="inputEmail"
-                                    placeholder="Enter email"
-                                    value={editEmail}
-                                    onChange={(e) => setEditEmail(e.target.value)}
-                                  />
-                                </div>
-                                <div className="col-12">
-                                  <label htmlFor="inputPhone" className="form-label">
-                                    Phone
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    id="inputPhone"
-                                    placeholder="Enter phone number"
-                                    value={editPhone}
-                                    onChange={(e) => setEditPhone(e.target.value)}
-                                  />
-                                </div>
-                                <div className="col-12">
-                                  <label htmlFor="inputDevices" className="form-label">
-                                    Devices
-                                  </label>
-                                  {
-                                    devicesList?.map((dl) => (
-                                      <div className="form-check" key={dl._id}>
-                                        <input
-                                          className="form-check-input"
-                                          type="checkbox"
-                                          id={`checkbox-${dl._id}`}
-                                          onChange={(e) => handleEditDeviceCheckboxChange(dl._id, e)}
-                                          checked={editDevices.includes(dl._id)}
-                                        />
-                                        <label className="form-check-label" htmlFor={`checkbox-${dl._id}`}>
-                                          {dl.name}
-                                        </label>
-                                      </div>
-                                    ))
-                                  }
-                                </div>
+                                        <div className="col-12">
+                                          <label htmlFor="inputName" className="form-label">
+                                            Name
+                                          </label>
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputName"
+                                            placeholder="Write a name"
+                                            value={editName}
+                                            onChange={(e) => setEditName(e.target.value)}
+                                          />
+                                        </div>
+                                        <div className="col-12">
+                                          <label htmlFor="inputEmail" className="form-label">
+                                            Email
+                                          </label>
+                                          <input
+                                            type="email"
+                                            className="form-control"
+                                            id="inputEmail"
+                                            placeholder="Enter email"
+                                            value={editEmail}
+                                            onChange={(e) => setEditEmail(e.target.value)}
+                                          />
+                                        </div>
+                                        <div className="col-12">
+                                          <label htmlFor="inputPhone" className="form-label">
+                                            Phone
+                                          </label>
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputPhone"
+                                            placeholder="Enter phone number"
+                                            value={editPhone}
+                                            onChange={(e) => setEditPhone(e.target.value)}
+                                          />
+                                        </div>
+                                        <div className="col-12">
+                                          <label htmlFor="inputDevices" className="form-label">
+                                            Devices
+                                          </label>
+                                          {
+                                            devicesList?.map((dl) => (
+                                              <div className="form-check" key={dl._id}>
+                                                <input
+                                                  className="form-check-input"
+                                                  type="checkbox"
+                                                  id={`checkbox-${dl._id}`}
+                                                  onChange={(e) => handleEditDeviceCheckboxChange(dl._id, e)}
+                                                  checked={editDevices.includes(dl._id)}
+                                                />
+                                                <label className="form-check-label" htmlFor={`checkbox-${dl._id}`}>
+                                                  {dl.name}
+                                                </label>
+                                              </div>
+                                            ))
+                                          }
+                                        </div>
 
-                                <div className="col-12">
-                                  <label htmlFor="inputUsername" className="form-label">
-                                    Username
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    id="inputUsername"
-                                    placeholder="Choose a username"
-                                    value={editUsername}
-                                    onChange={(e) => setEditUsername(e.target.value)}
-                                  />
-                                </div>
-                                <div className="col-md-6">
-                                  <div className="form-floating">
-                                    <select
-                                      name="status"
-                                      value={editStatus}
-                                      onChange={(e) => setEditStatus(e.target.value)}
-                                      className="form-select"
-                                      id="floatingSelectGrid11"
-                                    >
-                                      <option defaultValue />
-                                      <option value="Active">
-                                        Active
-                                      </option>
-                                      <option value="Deactive">
-                                        Deactive
-                                      </option>
+                                        <div className="col-12">
+                                          <label htmlFor="inputUsername" className="form-label">
+                                            Username
+                                          </label>
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputUsername"
+                                            placeholder="Choose a username"
+                                            value={editUsername}
+                                            onChange={(e) => setEditUsername(e.target.value)}
+                                          />
+                                        </div>
+                                        <div className="col-md-6">
+                                          <div className="form-floating">
+                                            <select
+                                              name="status"
+                                              value={editStatus}
+                                              onChange={(e) => setEditStatus(e.target.value)}
+                                              className="form-select"
+                                              id="floatingSelectGrid11"
+                                            >
+                                              <option defaultValue />
+                                              <option value="Active">
+                                                Active
+                                              </option>
+                                              <option value="Deactive">
+                                                Deactive
+                                              </option>
 
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid">Status</label>
-                                  </div>
-                                </div>
+                                            </select>
+                                            <label htmlFor="floatingSelectGrid">Status</label>
+                                          </div>
+                                        </div>
 
                                         <div className="modal-footer">
                                           <button

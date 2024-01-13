@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UseAuth } from "../../context/auth";
 import { NavLink } from "react-router-dom";
 
@@ -27,7 +27,7 @@ const Login = () => {
           token: res.data.token,
         });
         localStorage.setItem("auth", JSON.stringify(res.data));
-        navigate("/dashboard/admin")
+        navigate(res.data.user.role === 1 ? "/dashboard/admin" : "/dashboard/user")
       } else {
         toast.error(res.data.message);
       }
@@ -75,10 +75,10 @@ const Login = () => {
               id="exampleInputPassword1"
             />
           </div>
-          <p className="statement">
-            By continuing, you agree to Device Manager's Conditions of Use and Privacy
-            Notice.
+          <p>
+            For Admin login: email= a@a.a, password= 123 <br /> For test-User login: email= s@s.s, password=123
           </p>
+
           <div className="d-grid gap-2 col-6 mx-auto">
             <button type="submit" className="btn btn-sm btn-primary">
               Continue
